@@ -1,0 +1,8 @@
+#!/bin/sh
+
+VAULT_KUBERNETES_BACKEND=${VAULT_KUBERNETES_BACKEND:-kubernetes}
+VAULT_ROLE=${VAULT_ROLE:-role}
+
+VAULT_TOKEN=$(vault write ${VAULT_KUBERNETES_BACKEND} role=${VAULT_ROLE} jwt=@/var/run/secrets/kubernetes.io/serviceaccount/token -format=json | jq .auth.client_token -r)
+
+echo ${VAULT_TOKEN} > ~/.vault-token
